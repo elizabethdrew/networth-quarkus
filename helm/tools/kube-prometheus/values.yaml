@@ -1157,7 +1157,7 @@ prometheus:
     internal:
       jobList: [
         { "job_name": "user-service",
-          "metrics_path": "/actuator/prometheus",
+          "metrics_path": "/q/metrics",
           "static_configs": [
             {
                 "targets": [ "user-service:8081" ]
@@ -1165,7 +1165,7 @@ prometheus:
           ]
         },
         { "job_name": "account-service",
-          "metrics_path": "/actuator/prometheus",
+          "metrics_path": "/q/metrics",
           "static_configs": [
             {
               "targets": [ "account-service:8082" ]
@@ -1173,7 +1173,7 @@ prometheus:
           ]
         },
         { "job_name": "isa-service",
-          "metrics_path": "/actuator/prometheus",
+          "metrics_path": "/q/metrics",
           "static_configs": [
             {
               "targets": [ "isa-service:8083" ]
@@ -1181,7 +1181,7 @@ prometheus:
           ]
         },
         { "job_name": "truelayer-service",
-          "metrics_path": "/actuator/prometheus",
+          "metrics_path": "/q/metrics",
           "static_configs": [
             {
               "targets": [ "truelayer-service:8084" ]
@@ -1189,23 +1189,15 @@ prometheus:
           ]
         },
         { "job_name": "gatewayserver",
-          "metrics_path": "/actuator/prometheus",
+          "metrics_path": "/q/metrics",
           "static_configs": [
             {
               "targets": [ "gatewayserver:8080" ]
             }
           ]
         },
-        { "job_name": "eurekaserver",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "eurekaserver:8761" ]
-            }
-          ]
-        },
         { "job_name": "keycloak",
-          "metrics_path": "/actuator/prometheus",
+          "metrics_path": "/metrics",
           "static_configs": [
             {
               "targets": [ "keycloak:80" ]
@@ -1213,18 +1205,10 @@ prometheus:
           ]
         },
         { "job_name": "kafka",
-          "metrics_path": "/actuator/prometheus",
+          "metrics_path": "/metrics",
           "static_configs": [
             {
               "targets": [ "kafka:9092" ]
-            }
-          ]
-        },
-        { "job_name": "configserver",
-          "metrics_path": "/actuator/prometheus",
-          "static_configs": [
-            {
-              "targets": [ "configserver:8071" ]
             }
           ]
         } ]

@@ -1,10 +1,4 @@
 releases:
-  - name: configserver
-    namespace: default
-    chart: ./services/configserver
-    version: 0.1.0
-    values:
-      - ./services/configserver/values.yaml
   - name: gatewayserver
     namespace: default
     chart: ./services/gatewayserver

@@ -4,9 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Values.app.configMapName }}
 data:
-  {{- if .Values.settings.enabledFeatures.profile }}
   QUARKUS_PROFILE: {{ .Values.app.activeProfile }}
-  {{- end }}
   {{- if .Values.settings.enabledFeatures.mysql }}
   DB_URL: jdbc:mysql://{{ .Values.app.serviceName }}-mysql:3306/{{ .Values.app.serviceName }}-db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
   DB_USER: {{ .Values.mysql.databaseUser }}

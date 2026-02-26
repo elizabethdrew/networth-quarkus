@@ -22,17 +22,13 @@ spec:
             - containerPort: {{ .Values.service.containerPort }}
               protocol: TCP
           env:
-          {{- if .Values.settings.enabledFeatures.name }}
           - name: QUARKUS_APPLICATION_NAME
             value: {{ .Values.app.name }}
-          {{- end }}
-          {{- if .Values.settings.enabledFeatures.profile }}
           - name: QUARKUS_PROFILE
             valueFrom:
               configMapKeyRef:
                 name: {{ .Values.app.configMapName }}
                 key: QUARKUS_PROFILE
-          {{- end }}
           {{- if .Values.settings.enabledFeatures.mysql }}
           - name: DB_URL
             valueFrom:

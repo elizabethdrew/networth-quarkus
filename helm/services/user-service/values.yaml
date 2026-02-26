@@ -11,12 +11,7 @@ app:
 
 settings:
   enabledFeatures:
-    name: true
-    profile: true
     mysql: true
-    configClient: false
-    configServer: false
-    discovery: false
     gatewayRoutes: false
     securityServer: true
     otel: true
