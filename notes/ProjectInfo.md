@@ -8,7 +8,7 @@ Additionally, it will offer features to track ISA contributions and calculate ta
 
 ## Project Overview
 
-The architecture of the Networth Tracker follows a microservices design, segmented into function services like User and Account Services, alongside core services including Config Server and Gateway Server. Monitoring and observability services have also been added. 
+The architecture of the Networth Tracker follows a microservices design, segmented into function services like User and Account Services, alongside core services including the Gateway Server. Monitoring and observability services have also been added. 
 
 Each service plays a vital role in ensuring the application's functionality and resilience.
 
@@ -46,7 +46,6 @@ Each service plays a vital role in ensuring the application's functionality and 
 - **Common Library**: Holds common DTO's and Enums for use across services.
 
 **Core Services**
-- **Config Server**: Centralizes configuration properties for other services.
 - **Gateway Server**: Acts as the entry point to the application, routing requests to appropriate services.
 - **Kafka**: Handles messaging and data streaming between services.
 - **Keycloak**: Provides identity and access management, ensuring secure user authentication.
@@ -143,11 +142,10 @@ Each service plays a vital role in ensuring the application's functionality and 
 
 ### Infrastructure and Service Discovery
 
-1. **Eureka Server**: Service discovery endpoint used in Docker Compose environments.
+1. **Docker Compose Service DNS**: In-network service discovery using container service names.
 2. **Kubernetes Service DNS**: In-cluster service discovery mechanism for Kubernetes deployments.
-3. **Redis**: In-memory data store used as a database, cache, and message broker.
-4. **Docker**: Platform for developing, shipping, and running applications.
-5. **Docker Compose**: Tool for defining and running multi-container Docker applications.
+3. **Docker**: Platform for developing, shipping, and running applications.
+4. **Docker Compose**: Tool for defining and running multi-container Docker applications.
 
 ### Resilience and Circuit Breakers
 

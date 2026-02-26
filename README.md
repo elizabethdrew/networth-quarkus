@@ -19,9 +19,7 @@ Please see [Versions.md](/notes/Versions.md) for detailed changelog.
 + Truelayer Service - Handles calls to the Truelayer Auth and Data api's
 
 **Core Services**
-+ Config Server - Configuration module (kept for compatibility in this project)
 + Gateway Server - Entry point to the application, providing a single point of access to external clients.
-+ Eureka Server - Service registration and discovery (used in Docker Compose environments)
 + Keycloak Server - Open-source identity and access management system that provides single sign-on capabilities and security features.
 
 **Monitoring & Observability Services**
@@ -53,8 +51,7 @@ The Networth Tracker is powered by a robust stack of technologies, ensuring a sc
 - [Jib](<https://github.com/GoogleContainerTools/jib>): Containerize your Java applications for Docker and Kubernetes without a Dockerfile.
 
 ### Configuration and Discovery
-- Config Server module: Included in the stack for compatibility.
-- Eureka Server module: Service discovery endpoint used in Docker Compose environments.
+- Service-to-service routing in Docker Compose: Explicit URLs via environment variables.
 - Kubernetes service DNS: Native service discovery within Kubernetes clusters.
 
 ### Monitoring and Logging
@@ -68,17 +65,10 @@ The Networth Tracker is powered by a robust stack of technologies, ensuring a sc
 
 Dashboards provide a visual interface to monitor the services and infrastructure of your application. Here's how to access the dashboards for the Networth Tracker:
 
-### Service Discovery
+### Service Discovery and Routing
 
-- **Eureka Dashboard**: Monitors service registration and discovery.
-  - **URL**: [<http://localhost:8761>](<http://localhost:8761>) (when running via Docker Compose)
-  - **Port**: 8761
-
-### Configuration Management
-
-- **Config Server Module**: Centralized configuration management for all services.
-  - **Example URL**: [<http://localhost:8071/user-service/default>](<http://localhost:8071/user-service/default>) (replace `user-service` with the actual service name)
-  - **Port**: 8071
+- Docker Compose: Services communicate using explicit service URLs (for example `http://user-service:8081`).
+- Kubernetes: Services communicate using in-cluster DNS names.
 
 ### Runtime Environment Variables (Quarkus)
 
@@ -203,41 +193,33 @@ After installing the prerequisites, you can run the application as follows:
 ```
 git clone <https://gitlab.com/elizabeth.drew/networth-tracker-2024>
 ```
-2. Clone the project configurations repository:
-```
-git clone <https://gitlab.com/wcdio_backendprojects/networth-tracker-configurations>
-```
-3. Change into the project directory:
+2. Change into the project directory:
 ```
 cd networth-quarkus
 ```
 
-4. Build the project with Maven:
+3. Build the project with Maven:
 ```
 ./mvnw clean install
 ```
 
-5. Build the Docker images for each service (if your project is containerized):
+4. Build the Docker images for each service (if your project is containerized):
 ```
 ./mvnw compile jib:dockerBuild
 ```
 
-6. Start the application using Docker Compose:
+5. Start the application using Docker Compose:
 ```
 docker compose up -d
+```
+To start the observability stack as well:
+```
+docker compose --profile observability up -d
 ```
 Alternatively, deploy the application using Helm in a Kubernetes cluster (make sure Helm and Helmfile are installed):
 ```
 helmfile -f ./helm/helmfile.services.yaml apply
 helmfile -f ./helm/helmfile.observe.yaml apply
-```
-
-
-### Eureka Server Setup (Optional Kubernetes Manifest)
-
-If you want to run the Eureka server in Kubernetes, apply the provided manifest:
-```
-kubectl apply -f kubernetes/kubernetes-eurekaserver.yml
 ```
 
 

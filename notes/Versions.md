@@ -50,13 +50,13 @@ Gateway Server, Keycloak Server, and Monitoring tools added
 **Date: 14/11/2023**
 
 Discovery Server Added
-+ When loaded from Docker Compose, the microservices use Eureka as the discovery server.
++ When loaded from Docker Compose, the microservices use Compose service DNS and explicit service URLs.
 + When loaded in Kubernetes, service discovery is managed by cluster networking and service DNS.
 
 ## v1.1.0
 **Date: 13/11/2023**
 
-Config Server has been added.
+Initial centralized configuration approach added (legacy architecture).
 + Usable via Docker and Helm
 + User Service configurations have been tidied
 
