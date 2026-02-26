@@ -1,0 +1,35 @@
+{{- define "common.configmap" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.app.configMapName }}
+data:
+  {{- if .Values.settings.enabledFeatures.profile }}
+  QUARKUS_PROFILE: {{ .Values.app.activeProfile }}
+  {{- end }}
+  {{- if .Values.settings.enabledFeatures.mysql }}
+  DB_URL: jdbc:mysql://{{ .Values.app.serviceName }}-mysql:3306/{{ .Values.app.serviceName }}-db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+  DB_USER: {{ .Values.mysql.databaseUser }}
+  DB_PASSWORD: {{ .Values.mysql.databasePassword }}
+  MYSQL_ROOT_PASSWORD: root_{{ .Values.mysql.databasePassword }}
+  MYSQL_DATABASE: {{ .Values.app.serviceName }}-db
+  MYSQL_USER: {{ .Values.mysql.databaseUser }}
+  MYSQL_PASSWORD: {{ .Values.mysql.databasePassword }}
+  {{- end }}
+  {{- if .Values.settings.enabledFeatures.gatewayRoutes }}
+  USER_SERVICE_URL: {{ .Values.global.routing.userServiceURL }}
+  ACCOUNT_SERVICE_URL: {{ .Values.global.routing.accountServiceURL }}
+  TRUELAYER_SERVICE_URL: {{ .Values.global.routing.truelayerServiceURL }}
+  {{- end }}
+  {{- if .Values.settings.enabledFeatures.securityServer }}
+  KEYCLOAK_BASE_URI: {{ .Values.global.keycloak.baseURL }}
+  {{- end }}
+  {{- if .Values.settings.enabledFeatures.otel }}
+  JAVA_TOOL_OPTIONS: {{ .Values.global.otel.openTelemetryJavaAgent }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.global.otel.exporterEndPoint }}
+  OTEL_METRICS_EXPORTER: {{ .Values.global.otel.metricsExporter }}
+  {{- end }}
+  {{- if .Values.settings.enabledFeatures.kafka }}
+  KAFKA_BOOTSTRAP_SERVERS: {{ .Values.global.kafka.brokerURL }}
+  {{- end }}
+  {{- end -}}

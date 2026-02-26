@@ -1,0 +1,13 @@
+global:
+  otel:
+    openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-1.31.0.jar"
+    exporterEndPoint: http://tempo-grafana-tempo-distributor:4317
+    metricsExporter: none
+  kafka:
+    brokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
+  routing:
+    userServiceURL: http://user-service:8081
+    accountServiceURL: http://account-service:8082
+    truelayerServiceURL: http://truelayer-service:8084
+  keycloak:
+    baseURL: http://keycloak.default.svc.cluster.local:80

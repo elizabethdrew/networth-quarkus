@@ -1,0 +1,50 @@
+version: '3.8'
+
+networks:
+  networth:
+
+volumes:
+  db_isa:
+
+services:
+
+  isa-service:
+    image: networth/isa-service:0.0.1-SNAPSHOT
+    ports:
+      - "8083:8083"
+    networks:
+      - networth
+    healthcheck:
+      test: "curl --fail --silent localhost:8083/q/health/ready | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    depends_on:
+      - isa_db
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 120s
+    environment:
+      QUARKUS_PROFILE: docker
+      QUARKUS_APPLICATION_NAME: isa-service
+      DB_URL: jdbc:mysql://isa_db:3306/isadb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USER: admin
+      DB_PASSWORD: password
+
+  isa_db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=isadb
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3308:3306"
+    networks:
+      - networth
+    volumes:
+      - db_isa:/var/lib/mysql

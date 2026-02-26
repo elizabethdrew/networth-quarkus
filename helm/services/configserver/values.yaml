@@ -1,0 +1,32 @@
+global: {}
+
+app:
+  name: configserver
+  label: configserver
+  deploymentName: configserver-deployment
+  serviceName: configserver
+  configMapName: configserver-configmap
+  replicaCount: 1
+
+settings:
+  enabledFeatures:
+    name: true
+    profile: false
+    mysql: false
+    configClient: false
+    configServer: false
+    discovery: false
+    gatewayRoutes: false
+    securityServer: false
+    otel: true
+    kafka: false
+
+image:
+  repository: networth/configserver
+  tag: 0.0.1-SNAPSHOT
+
+service:
+  type: ClusterIP
+  port: 8071
+  targetPort: 8071
+  containerPort: 8071

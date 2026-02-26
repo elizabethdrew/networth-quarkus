@@ -1,0 +1,33 @@
+global: {}
+
+app:
+  name: gatewayserver
+  label: gatewayserver
+  deploymentName: gatewayserver-deployment
+  serviceName: gatewayserver
+  configMapName: gatewayserver-configmap
+  replicaCount: 1
+  activeProfile: k8
+
+settings:
+  enabledFeatures:
+    name: true
+    profile: true
+    mysql: false
+    configClient: false
+    configServer: false
+    discovery: false
+    gatewayRoutes: true
+    securityServer: false
+    otel: true
+    kafka: false
+
+image:
+  repository: networth/gatewayserver
+  tag: 0.0.1-SNAPSHOT
+
+service:
+  type: LoadBalancer
+  port: 8080
+  targetPort: 8080
+  containerPort: 8080

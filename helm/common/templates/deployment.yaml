@@ -1,0 +1,103 @@
+{{- define "common.deployment" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.deploymentName }}
+  labels:
+    app: {{ .Values.app.label }}
+spec:
+  replicas: {{ .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.label }}
+    spec:
+      containers:
+        - name: {{ .Values.app.label }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+          env:
+          {{- if .Values.settings.enabledFeatures.name }}
+          - name: QUARKUS_APPLICATION_NAME
+            value: {{ .Values.app.name }}
+          {{- end }}
+          {{- if .Values.settings.enabledFeatures.profile }}
+          - name: QUARKUS_PROFILE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: QUARKUS_PROFILE
+          {{- end }}
+          {{- if .Values.settings.enabledFeatures.mysql }}
+          - name: DB_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: DB_URL
+          - name: DB_USER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: DB_PASSWORD
+          {{- end }}
+          {{- if .Values.settings.enabledFeatures.gatewayRoutes }}
+          - name: USER_SERVICE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: USER_SERVICE_URL
+          - name: ACCOUNT_SERVICE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: ACCOUNT_SERVICE_URL
+          - name: TRUELAYER_SERVICE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: TRUELAYER_SERVICE_URL
+          {{- end }}
+          {{- if .Values.settings.enabledFeatures.securityServer }}
+          - name: KEYCLOAK_BASE_URI
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: KEYCLOAK_BASE_URI
+          {{- end }}
+          {{- if .Values.settings.enabledFeatures.kafka }}
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: KAFKA_BOOTSTRAP_SERVERS
+          {{- end }}
+          {{- if .Values.settings.enabledFeatures.otel }}
+          - name: JAVA_TOOL_OPTIONS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: JAVA_TOOL_OPTIONS
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: OTEL_EXPORTER_OTLP_ENDPOINT
+          - name: OTEL_METRICS_EXPORTER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.app.configMapName }}
+                key: OTEL_METRICS_EXPORTER
+          - name: OTEL_SERVICE_NAME
+            value: {{ .Values.app.name }}
+          {{- end }}
+{{- end -}}

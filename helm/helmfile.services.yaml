@@ -1,0 +1,43 @@
+releases:
+  - name: configserver
+    namespace: default
+    chart: ./services/configserver
+    version: 0.1.0
+    values:
+      - ./services/configserver/values.yaml
+  - name: gatewayserver
+    namespace: default
+    chart: ./services/gatewayserver
+    version: 0.1.0
+    values:
+      - ./services/gatewayserver/values.yaml
+  - name: user-service
+    namespace: default
+    chart: ./services/user-service
+    version: 0.1.0
+    values:
+      - ./services/user-service/values.yaml
+  - name: account-service
+    namespace: default
+    chart: ./services/account-service
+    version: 0.1.0
+    values:
+      - ./services/account-service/values.yaml
+  - name: isa-service
+    namespace: default
+    chart: ./services/isa-service
+    version: 0.1.0
+    values:
+      - ./services/isa-service/values.yaml
+  - name: truelayer-service
+    namespace: default
+    chart: ./services/truelayer-service
+    version: 0.1.0
+    values:
+      - ./services/truelayer-service/values.yaml
+  - name: kafka
+    namespace: default
+    chart: ./tools/kafka
+    version: 26.6.1
+    values:
+      - ./tools/kafka/values.yaml

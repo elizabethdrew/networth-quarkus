@@ -1,0 +1,48 @@
+global: {}
+
+app:
+  name: user-service
+  label: user-service
+  deploymentName: user-service-deployment
+  serviceName: user-service
+  configMapName: user-service-configmap
+  activeProfile: k8
+  replicaCount: 1
+
+settings:
+  enabledFeatures:
+    name: true
+    profile: true
+    mysql: true
+    configClient: false
+    configServer: false
+    discovery: false
+    gatewayRoutes: false
+    securityServer: true
+    otel: true
+    kafka: true
+
+image:
+  repository: networth/user-service
+  tag: 0.0.1-SNAPSHOT
+
+service:
+  type: ClusterIP
+  port: 8081
+  targetPort: 8081
+  containerPort: 8081
+
+mysql:
+  databaseUser: admin
+  databasePassword: password
+  replicas: 1
+  image: mysql:8.0
+  service:
+    type: ClusterIP
+    port: 3306
+    protocol: TCP
+  primary:
+    persistence:
+      enabled: true
+      accessModes: ["ReadWriteOnce"]
+      size: 8Gi

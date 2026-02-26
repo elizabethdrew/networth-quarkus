@@ -1,0 +1,48 @@
+global: {}
+
+app:
+  name: truelayer-service
+  label: truelayer-service
+  deploymentName: truelayer-service-deployment
+  serviceName: truelayer-service
+  configMapName: truelayer-service-configmap
+  activeProfile: k8
+  replicaCount: 1
+
+settings:
+  enabledFeatures:
+    name: true
+    profile: true
+    mysql: true
+    configClient: false
+    configServer: false
+    discovery: false
+    gatewayRoutes: false
+    securityServer: false
+    otel: true
+    kafka: true
+
+image:
+  repository: networth/truelayer-service
+  tag: 0.0.1-SNAPSHOT
+
+service:
+  type: ClusterIP
+  port: 8084
+  targetPort: 8084
+  containerPort: 8084
+
+mysql:
+  databaseUser: admin
+  databasePassword: password
+  replicas: 1
+  image: mysql:8.0
+  service:
+    type: ClusterIP
+    port: 3306
+    protocol: TCP
+  primary:
+    persistence:
+      enabled: true
+      accessModes: ["ReadWriteOnce"]
+      size: 8Gi
