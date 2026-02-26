@@ -78,6 +78,9 @@
 					<to>
 						<image>networth/${project.artifactId}:${project.version}</image>
 					</to>
+					<container>
+						<mainClass>io.quarkus.bootstrap.runner.QuarkusEntryPoint</mainClass>
+					</container>
 				</configuration>
 			</plugin>
 		</plugins>

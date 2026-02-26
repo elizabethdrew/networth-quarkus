@@ -214,6 +214,10 @@ cd networth-quarkus
 ```
 docker compose up -d
 ```
+If your Docker setup requires a specific Kafka image tag, override it:
+```
+KAFKA_IMAGE=apache/kafka:3.7.1 docker compose up -d
+```
 To start the observability stack as well:
 ```
 docker compose --profile observability up -d
@@ -231,6 +235,21 @@ If Jib fails:
 ```
 ./mvnw -Dmaven.repo.local=.m2/repository -pl user-service,gatewayserver,account-service,isa-service,truelayer-service -am compile com.google.cloud.tools:jib-maven-plugin:dockerBuild
 ```
+- If Compose fails pulling Kafka, set `KAFKA_IMAGE` to a reachable public tag (for example `apache/kafka:3.7.1`) and re-run `docker compose up -d`.
+
+### Postman Setup
+
+Import these files into Postman:
+
+- `postman/Networth-Quarkus.postman_collection.json`
+- `postman/Networth-Quarkus.local.postman_environment.json`
+
+Use the `Networth Quarkus Local` environment, then set:
+
+- `user_id` to a valid Keycloak user id (`sub`)
+- `gateway_base_url` and service base URLs if your ports differ
+
+Most business endpoints require `X-User-ID`. The collection is preconfigured to send it.
 
 
 ### Configuring Keycloak Realm in Kubernetes

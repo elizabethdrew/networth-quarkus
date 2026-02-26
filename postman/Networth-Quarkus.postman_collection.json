@@ -1,0 +1,411 @@
+{
+  "info": {
+    "name": "Networth Quarkus APIs",
+    "_postman_id": "1f67d916-2ea9-4df1-90ec-8a8336609e32",
+    "description": "Postman collection for gateway and service endpoints in networth-quarkus.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Gateway",
+      "item": [
+        {
+          "name": "Gateway Contact Support",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_base_url}}/contactSupport",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["contactSupport"]
+            }
+          }
+        },
+        {
+          "name": "Gateway Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_base_url}}/q/health",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["q", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth (via Gateway)",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/auth/login",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accessToken\": \"{{access_token}}\",\n  \"refreshToken\": \"{{refresh_token}}\",\n  \"idTokenHint\": \"{{id_token_hint}}\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/auth/logout",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users (via Gateway)",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/users",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/users",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "users"]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"taxRate\": \"BASIC\",\n  \"dateOfBirth\": \"1990-01-01\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/users",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "users"]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/users",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "users"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accounts (via Gateway)",
+      "item": [
+        {
+          "name": "Create Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  if (body && body.accountId) {",
+                  "    pm.environment.set('account_id', body.accountId);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountNickname\": \"Emergency Fund\",\n  \"type\": \"SAVINGS_ACCOUNT\",\n  \"currency\": \"GBP\",\n  \"creditLimit\": 0,\n  \"percentageOwnership\": 100,\n  \"fixedTerm\": false,\n  \"fixedTermEndDate\": null,\n  \"dateOpened\": \"2024-01-01T00:00:00\",\n  \"status\": \"IN_USE\",\n  \"notes\": \"Created from Postman\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/accounts",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "accounts"]
+            }
+          }
+        },
+        {
+          "name": "Get User Accounts",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/accounts",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "accounts"]
+            }
+          }
+        },
+        {
+          "name": "Get Account By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/accounts/{{account_id}}",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "accounts", "{{account_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Account",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountNickname\": \"Emergency Fund Updated\",\n  \"creditLimit\": 0,\n  \"currentBalance\": 2000.00,\n  \"dateOpened\": \"2024-01-01T00:00:00\",\n  \"status\": \"IN_USE\",\n  \"notes\": \"Updated from Postman\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/accounts/{{account_id}}",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "accounts", "{{account_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/accounts/{{account_id}}",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "accounts", "{{account_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Balances and Networth (via Gateway)",
+      "item": [
+        {
+          "name": "Get Balance History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/accounts/{{account_id}}/balances",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "accounts", "{{account_id}}", "balances"]
+            }
+          }
+        },
+        {
+          "name": "Get Balance By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/accounts/{{account_id}}/balances/{{balance_id}}",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "accounts", "{{account_id}}", "balances", "{{balance_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Networth",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/networth",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "networth"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TrueLayer (via Gateway)",
+      "item": [
+        {
+          "name": "Start Bank Auth (redirect)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/bank/add",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "bank", "add"]
+            }
+          }
+        },
+        {
+          "name": "TrueLayer Callback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/bank/callback?code={{auth_code}}&scope={{auth_scope}}&state={{auth_state}}",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "bank", "callback"],
+              "query": [
+                { "key": "code", "value": "{{auth_code}}" },
+                { "key": "scope", "value": "{{auth_scope}}" },
+                { "key": "state", "value": "{{auth_state}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Linked Accounts",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/bank/accounts",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "bank", "accounts"]
+            }
+          }
+        },
+        {
+          "name": "Update Bank Data",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-User-ID", "value": "{{user_id}}" }
+            ],
+            "url": {
+              "raw": "{{gateway_base_url}}/api/v1/bank/update",
+              "host": ["{{gateway_base_url}}"],
+              "path": ["api", "v1", "bank", "update"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Direct Service Health",
+      "item": [
+        {
+          "name": "user-service /q/health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{user_service_base_url}}/q/health",
+              "host": ["{{user_service_base_url}}"],
+              "path": ["q", "health"]
+            }
+          }
+        },
+        {
+          "name": "account-service /q/health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{account_service_base_url}}/q/health",
+              "host": ["{{account_service_base_url}}"],
+              "path": ["q", "health"]
+            }
+          }
+        },
+        {
+          "name": "isa-service /q/health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{isa_service_base_url}}/q/health",
+              "host": ["{{isa_service_base_url}}"],
+              "path": ["q", "health"]
+            }
+          }
+        },
+        {
+          "name": "truelayer-service /q/health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{truelayer_service_base_url}}/q/health",
+              "host": ["{{truelayer_service_base_url}}"],
+              "path": ["q", "health"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
