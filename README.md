@@ -191,7 +191,7 @@ After installing the prerequisites, you can run the application as follows:
 
 1. Clone the project repository:
 ```
-git clone <https://gitlab.com/elizabeth.drew/networth-tracker-2024>
+git clone <https://github.com/elizabethdrew/networth-quarkus>
 ```
 2. Change into the project directory:
 ```
@@ -203,12 +203,14 @@ cd networth-quarkus
 ./mvnw clean install
 ```
 
-4. Build the Docker images for each service (if your project is containerized):
+4. Ensure Docker is running (Docker Desktop or Docker Engine).
+
+5. Build Docker images for service modules with Jib:
 ```
-./mvnw compile jib:dockerBuild
+./mvnw -pl user-service,gatewayserver,account-service,isa-service,truelayer-service -am compile com.google.cloud.tools:jib-maven-plugin:dockerBuild
 ```
 
-5. Start the application using Docker Compose:
+6. Start the application using Docker Compose:
 ```
 docker compose up -d
 ```
@@ -220,6 +222,14 @@ Alternatively, deploy the application using Helm in a Kubernetes cluster (make s
 ```
 helmfile -f ./helm/helmfile.services.yaml apply
 helmfile -f ./helm/helmfile.observe.yaml apply
+```
+
+If Jib fails:
+- Confirm Docker is running locally.
+- Use the full plugin coordinate (as shown above), not just `jib:dockerBuild`.
+- If Maven local repo permissions are an issue, run with a local repo path:
+```
+./mvnw -Dmaven.repo.local=.m2/repository -pl user-service,gatewayserver,account-service,isa-service,truelayer-service -am compile com.google.cloud.tools:jib-maven-plugin:dockerBuild
 ```
 
 
