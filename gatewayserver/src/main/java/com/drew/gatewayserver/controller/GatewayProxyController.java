@@ -140,7 +140,8 @@ public class GatewayProxyController {
         try {
             HttpResponse<String> upstreamResponse = httpClient.send(builder.build(), HttpResponse.BodyHandlers.ofString());
             Response.ResponseBuilder responseBuilder = Response.status(upstreamResponse.statusCode());
-            upstreamResponse.headers().map().forEach((k, v) -> v.forEach(value -> responseBuilder.header(k, value)));
+            upstreamResponse.headers().firstValue("content-type").ifPresent(value -> responseBuilder.header("Content-Type", value));
+            upstreamResponse.headers().firstValue("location").ifPresent(value -> responseBuilder.header("Location", value));
             return responseBuilder.entity(upstreamResponse.body()).build();
         } catch (IOException | InterruptedException e) {
             if (e instanceof InterruptedException) {
@@ -157,7 +158,7 @@ public class GatewayProxyController {
                              ContainerRequestContext requestContext) {
         for (Map.Entry<String, List<String>> entry : inboundHeaders.entrySet()) {
             String name = entry.getKey();
-            if ("host".equalsIgnoreCase(name) || "content-length".equalsIgnoreCase(name)) {
+            if (isRestrictedHeader(name)) {
                 continue;
             }
             for (String value : entry.getValue()) {
@@ -169,6 +170,15 @@ public class GatewayProxyController {
         if (extractedUserId != null && inboundHeaders.getFirst("X-User-ID") == null) {
             builder.header("X-User-ID", extractedUserId.toString());
         }
+    }
+
+    private boolean isRestrictedHeader(String name) {
+        return "host".equalsIgnoreCase(name)
+                || "content-length".equalsIgnoreCase(name)
+                || "connection".equalsIgnoreCase(name)
+                || "expect".equalsIgnoreCase(name)
+                || "upgrade".equalsIgnoreCase(name)
+                || "transfer-encoding".equalsIgnoreCase(name);
     }
 
     private String resolveTargetService(String path) {

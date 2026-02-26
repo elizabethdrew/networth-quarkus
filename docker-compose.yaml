@@ -42,10 +42,6 @@ services:
       USER_SERVICE_URL: http://user-service:8081
       ACCOUNT_SERVICE_URL: http://account-service:8082
       TRUELAYER_SERVICE_URL: http://truelayer-service:8084
-      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.31.0.jar"
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
-      OTEL_METRICS_EXPORTER: none
-      OTEL_SERVICE_NAME: "gatewayserver"
 
   user-service:
     image: networth/user-service:0.0.1-SNAPSHOT
@@ -75,10 +71,7 @@ services:
       DB_USER: admin
       DB_PASSWORD: password
       KEYCLOAK_BASE_URI: http://keycloak:8080
-      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.31.0.jar"
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
-      OTEL_METRICS_EXPORTER: none
-      OTEL_SERVICE_NAME: "user-service"
+      KEYCLOAK_USER_CLIENT_SECRET: Ow1dayvip5w4BHJeacRzVLHLCfJNCm3W
 
   users_db:
     image: mysql:8.0
@@ -122,10 +115,6 @@ services:
       DB_USER: admin
       DB_PASSWORD: password
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.31.0.jar"
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
-      OTEL_METRICS_EXPORTER: none
-      OTEL_SERVICE_NAME: "account-service"
 
   account_db:
     image: mysql:8.0
@@ -169,10 +158,6 @@ services:
       DB_USER: admin
       DB_PASSWORD: password
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.31.0.jar"
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
-      OTEL_METRICS_EXPORTER: none
-      OTEL_SERVICE_NAME: "isa-service"
 
   isa_db:
     image: mysql:8.0
@@ -217,10 +202,6 @@ services:
       DB_USER: admin
       DB_PASSWORD: password
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-      JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/opentelemetry-javaagent-1.31.0.jar"
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4317
-      OTEL_METRICS_EXPORTER: none
-      OTEL_SERVICE_NAME: "truelayer-service"
 
   truelayer_db:
     image: mysql:8.0
@@ -279,7 +260,7 @@ services:
       - ./helm/tools/keycloak/realm/realm-export.json:/opt/keycloak/data/import/realm-export.json
 
   keycloak_db:
-    image: postgres:latest
+    image: postgres:16
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin

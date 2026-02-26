@@ -207,7 +207,16 @@ cd networth-quarkus
 
 5. Build Docker images for service modules with Jib:
 ```
-./mvnw -pl user-service,gatewayserver,account-service,isa-service,truelayer-service -am compile com.google.cloud.tools:jib-maven-plugin:dockerBuild
+./mvnw -pl user-service,gatewayserver,account-service,isa-service,truelayer-service -am package com.google.cloud.tools:jib-maven-plugin:dockerBuild
+```
+This must complete successfully before `docker compose up -d`. The compose file expects these local images:
+`networth/gatewayserver:0.0.1-SNAPSHOT`, `networth/user-service:0.0.1-SNAPSHOT`,
+`networth/account-service:0.0.1-SNAPSHOT`, `networth/isa-service:0.0.1-SNAPSHOT`,
+`networth/truelayer-service:0.0.1-SNAPSHOT`.
+
+Optional verification:
+```
+docker image ls | grep 'networth/'
 ```
 
 6. Start the application using Docker Compose:
@@ -233,9 +242,14 @@ If Jib fails:
 - Use the full plugin coordinate (as shown above), not just `jib:dockerBuild`.
 - If Maven local repo permissions are an issue, run with a local repo path:
 ```
-./mvnw -Dmaven.repo.local=.m2/repository -pl user-service,gatewayserver,account-service,isa-service,truelayer-service -am compile com.google.cloud.tools:jib-maven-plugin:dockerBuild
+./mvnw -Dmaven.repo.local=.m2/repository -pl user-service,gatewayserver,account-service,isa-service,truelayer-service -am package com.google.cloud.tools:jib-maven-plugin:dockerBuild
 ```
 - If Compose fails pulling Kafka, set `KAFKA_IMAGE` to a reachable public tag (for example `apache/kafka:3.7.1`) and re-run `docker compose up -d`.
+- If Keycloak DB fails after a Postgres image update, clear old compose volumes and recreate:
+```
+docker compose down -v
+docker compose up -d
+```
 
 ### Postman Setup
 
